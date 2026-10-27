@@ -1,33 +1,61 @@
 #include <iostream>
 #include <string>
 #include <sstream>
-#include <unordered_map>
 using namespace std;
-string morseDecode (const string&morse) {
-    static const unordered_map<string, char>table= {
-        {".-", 'A'}, {"-...", 'B'}, {"-.-.", 'C'}, {"-..", 'D'},  {".", 'E'}, {"..-.", 'F'}, {"--.", 'G'}, {"....", 'H'}, {"..", 'I'}, {".---", 'J'}, {"-.-", 'K'},  {".-..", 'L'}, {"--", 'M'},   {"-.", 'N'},   {"---", 'O'}, {".--.", 'P'}, {"--.-", 'Q'}, {".-.", 'R'},  {"...", 'S'},  {"-", 'T'}, {"..-", 'U'},  {"...-", 'V'}, {".--", 'W'},  {"-..-", 'X'}, {"-.--", 'Y'}, {"--..", 'Z'} 
+string letters="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+string morse[36]={".-", "-...", "-.-.", "-..", ".", "..-.", "--.", "....", "..", ".---",
+    "-.-", ".-..", "--", "-.", "---", ".--.", "--.-", ".-.", "...", "-",
+    "..-", "...-", ".--", "-..-", "-.--", "--..",
+    "-----", ".----", "..---", "...--", "....-",
+    ".....", "-....", "--...", "---..", "----."
     };
-    string result;
-    istringstream stream(morse);
-    string token;
-    while (stream>>token){
-        if (token=="/"){
-            result += " ";
+string textToMorse(string text) {
+   string result="";
+   for (int i=0; i<text.size(); i++){
+        char c=toupper(text[i]);
+        if (c==' ') {
+            result+="/ ";
         }
-    else{
-        auto it=table.find(token);
-        result += (it !=table.end()) ? it->second : '?';
-        }
+        else {
+            int pos=letters.find(c);
+            if (pos !=-1)
+            result += morse[pos] + " ";
+        } 
     }
     return result;
+    }
+string morseToText(string m) {
+    string result="";
+    string code="";
+    m+=' ';
+    for (int i=0; i<m.size(); i++){
+        if (m[i]!=' ') {
+            code+=m[i];
+        }
+        else if (code !=""){
+            if (code=="/"){
+                result+=' ';
+        }
+        else{
+            char found='?';
+            for (int j=0; j<36; j++){
+                if (code==morse[j]){
+                    found=letters[j];
+                }
+            }
+            result+=found;
+        }
+        code="";
+        }
+    }
+        return result;
 }
-
 int main (){
     int choice, ft;
     string input;
-    cout<<"==============DECODER=============="<<endl;
+    cout<<"==============DECODER/ENCODER=============="<<endl;
     cout<<"|"<<endl;
-    cout<<"====Choose your type of message===="<<endl;
+    cout<<"=====Choose your type of message====="<<endl;
     cout<<"| [1] Morse code"<<endl;
     cout<<"| [2] Binary/Hexadecimal"<<endl;
     cout<<"| Enter your choice: ";cin>>choice;cout<<endl;
@@ -41,10 +69,15 @@ int main (){
             if (ft==1)
             {cout<<"| Enter the morse code (spaces between letters, / between words): ";
                 getline(cin, input);
-                cout<<"| In text: "<<morseDecode(input)<<endl;
+                cout<<"| In text: "<<morseToText(input)<<endl;
+            }
+            else if (ft==2)
+            {cout<<"Enter the text: ";
+                getline (cin, input);
+                cout<<"| In morse code: "<<textToMorse(input)<<endl;
             }
         }
     else if (choice==2)
-        cout<<"sigma"<<endl;
+        cout<<"Not made yet"<<endl;
     return 0;
 }
