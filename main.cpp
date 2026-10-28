@@ -51,13 +51,18 @@ string morseToText(string m) {
         return result;
 }
 int main (){
-    int choice, ft;
-    string input;
-    cout<<"==============DECODER/ENCODER=============="<<endl;
+    int choice, ft, decimal=0, value, rem;
+    char digit;
+    bool valid=true;
+    string input, binary="", hex="";
+    cout<<"============DECODING & ENCODIG============"<<endl;
+    cout<<"==================BUREAU=================="<<endl;
+    cout<<"=================Est. 1924================"<<endl;
     cout<<"|"<<endl;
     cout<<"=====Choose your type of message====="<<endl;
     cout<<"| [1] Morse code"<<endl;
     cout<<"| [2] Binary/Hexadecimal"<<endl;
+    cout<<"| [0] Exit"<<endl;
     cout<<"| Enter your choice: ";cin>>choice;cout<<endl;
     if (choice==1)
         {cout<<"===MORSE CODE DECODER/ENCODER===\n";
@@ -77,7 +82,92 @@ int main (){
                 cout<<"| In morse code: "<<textToMorse(input)<<endl;
             }
         }
-    else if (choice==2)
-        cout<<"Not made yet"<<endl;
+    else if (choice==2){
+        cout<<"===HEXADECIMAL/BINARY==="<<endl;
+        cout<<"| Do you want to convert:\n";
+        cout<<"| [1] From decimal to hexadecimal\n";
+        cout<<"| [2] From hexadecimal to decimal\n";
+        cout<<"| [3] From decimal to binary\n";
+        cout<<"| [4] From binary to decimal\n";
+        cout<<"| Enter your choice: ";cin>>ft;cout<<endl;
+        if (ft==1){
+            string digits="0123456789ABCDEF";
+            cout<<"| Enter the number: ";cin>>decimal;cout<<endl;
+            while (decimal<0){
+                cout<<"| Enter a positive number!\n";
+                cin>>decimal;
+            }
+            if (decimal==0)
+                hex="0";
+            else{
+                while (decimal>0){
+                    rem=decimal%16;
+                    hex=digits[rem]+hex;
+                    decimal/=16;
+                }
+            }
+            cout<<"| Hexadecimal: "<<hex<<endl;
+        }
+    
+        else if (ft==2) {
+            decimal=0;
+            valid=true;
+            cout<<"| Enter the hexadecimal number: ";cin>>hex;cout<<endl;
+            for(int i=0; i<hex.length(); i++){
+                digit=hex[i];
+                if (digit>='0' && digit<='9')
+                value=digit-'0';
+                else if (digit>='A' && digit<='F')
+                value=digit-'A'+10;
+                else if (digit>='a' && digit<='f')
+                value=digit-'a'+10;
+                else{
+                    valid=false;
+                    break;
+                }
+                decimal=decimal*16+value;
+            }
+        if (valid)
+            cout<<"| Decimal: "<<decimal<<endl;
+        else 
+            cout<<"| Invalid hexadecimal number!\n";
+        }
+        else if (ft==3) {
+            cout<<"| Enter the number: ";cin>>decimal;cout<<endl;
+            while (decimal<0){
+                cout<<"| Enter a positive number!\n";
+                cin>>decimal;
+            }
+            if (decimal==0)
+                binary="0";
+            else {
+                while (decimal>0){
+                    binary=char('0'+decimal%2)+binary;
+                    decimal/=2;
+                }
+            }
+            cout<<"| Binary: "<<binary<<endl;
+        }
+        else if (ft==4) {
+            decimal=0;
+            valid=true;
+            cout<<"| Enter the binary number: ";cin>>binary;cout<<endl;
+            for (int i=0; i<binary.length(); i++){
+                if (binary[i] != '0' && binary[i] != '1') {
+                    valid=false;
+                    break;
+                }
+            decimal=decimal*2+(binary[i]-'0');
+        }
+        if (valid)
+            cout<<"| Decimal: "<<decimal<<endl;
+        else 
+            cout<<"| Invalid binary number!\n";
+    }
+}
+        else if (choice==0){
+            cout<<"Transmision ended. Goodbye!";
+        return 0;
+        }
     return 0;
 }
