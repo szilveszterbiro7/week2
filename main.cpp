@@ -80,6 +80,7 @@ int main (){
     string inp, binary="", hex="";
     while (true){
     cout<<"=========================================="<<endl;
+    cout<<"| * * * * * * * * SIGNAL * * * * * * * * |"<<endl;
     cout<<"|           DECODING & ENCODIG           |"<<endl;
     cout<<"|                 BUREAU                 |"<<endl;
     cout<<"|----------------Est. 1924---------------|"<<endl;
@@ -91,10 +92,11 @@ int main (){
     cout<<"| [3] CLASSICAL CIPHERS"<<endl;
     cout<<"| [0] EXIT"<<endl;
     cout<<"| Enter your choice: ";cin>>choice;cout<<endl;
-    if (choice==1)
-        {cout<<"===========================\n";
+    if (choice==1){
+        cout<<"===========================\n";
         cout<<"          MORSE CODE\n";
         cout<<"===========================\n";
+        cout<<"|\n";
         cout<<"| Do you want to convert:\n";
         cout<<"| [1] From morse code to text\n";
         cout<<"| [2] From text to morse code\n";
@@ -115,6 +117,7 @@ int main (){
         cout<<"===========================\n";
         cout<<"       NUMBER SYSTEMS"<<endl;
         cout<<"===========================\n";
+        cout<<"|\n";
         cout<<"| Do you want to convert:\n";
         cout<<"| [1] From decimal to hexadecimal\n";
         cout<<"| [2] From hexadecimal to decimal\n";
@@ -123,6 +126,7 @@ int main (){
         cout<<"| Enter your choice: ";cin>>ft;cout<<endl;
         if (ft==1){
             string digits="0123456789ABCDEF";
+            hex="";
             cout<<"| Enter the number: ";cin>>decimal;cout<<endl;
             while (decimal<0){
                 cout<<"| Enter a positive number!\n";
@@ -165,6 +169,7 @@ int main (){
         }
         else if (ft==3) {
             cout<<"| Enter the number: ";cin>>decimal;cout<<endl;
+            binary="";
             while (decimal<0){
                 cout<<"| Enter a positive number!\n";
                 cin>>decimal;
@@ -194,13 +199,14 @@ int main (){
             cout<<"| Decimal: "<<decimal<<endl;
         else 
             cout<<"| Invalid binary number!\n";
-    }
-}
+                }
+        }
         else if (choice==3){
             while (true){
             cout<<"==========================="<<endl;
             cout<<"      CLASSICAL CIPHERS"<<endl;
             cout<<"==========================="<<endl;
+            cout<<"|\n";
             cout<<"| Do you want to convert from:\n";
             cout<<"| [1] Caesar Cipher\n";
             cout<<"| [2] Atbash Cipher\n";
@@ -210,10 +216,10 @@ int main (){
             cin.ignore(1000, '\n');
             if (ft==0)
             break;
-            while (ft>3 || ft<0){
-                cout<<"Invalid option!\n";
-                cin>>ft;
-            }
+            if (ft < 1 || ft > 3) {
+                cout << "Invalid option!\n";
+                continue;
+                    }
             if (ft==1){
                 cout<<"| Enter your message: ";
                 getline(cin, inp);cout<<endl;
@@ -225,24 +231,24 @@ int main (){
             else if (ft==2){
                 cout<<"| Enter your message: ";
                 getline(cin, inp);cout<<endl;
-                cout<<"Encodeed/Decoded message: "<<aCipher<<endl;
+                cout<<"Encodeed/Decoded message: "<<aCipher(inp)<<endl;
             }
             else if (ft==3){
-                cout<<"=====MANUAL=====";
+                cout<<"=====MANUAL=====\n";
                 cout<<"| WHAT IS A CIPHER?\n| A cipher changes a message into a coded form.\n| It can be used to hide a message from casual readers\n.";
                 cout<<endl;
                 cout<<"| 1.CAESAR CIPHER\n| Each letter is shifted through the alphabet.\n| Example: HELLO with a shift of 3 becomes KHOOR.\n| You can choose the value of the shift.\n";
                 cout<<endl;
                 cout<<"| 2.ATBASH CIPHER\n| The alphabet is reversed: A becomes Z, B becomes Y.\n| Example: HELLO becomes SVOOL.\n";
             }
-            cout << "\nPress Enter to return to the menu";
+            cout << "\n| Press Enter to return to the menu";
         cin.get();
         }
         }
         else if (choice==0){
-            cout<<"Transmision ended. Goodbye!";
+            cout<<"| Transmision ended. Goodbye!";
         return 0;
         }
-    }
+}
     return 0;
 }
