@@ -99,9 +99,47 @@ string asciiToTxt (string code){
         return" |Enter at least 1 ASCII number"; 
     return result;
 }
-
+string letterToNumber(string txt){
+    string code="";
+    bool first=true;
+    for (int i=0; i<txt.length(); i++){
+        char c=toupper(txt[i]);
+    if (c>= 'A' && c<='Z'){
+        if (!first)
+            code+=" ";
+        code+=to_string(c-'A'+1);
+        first=false;
+    }
+    else if (c==' ' && !first){
+        code+=" / ";
+        first=true;
+        }
+    }
+    return code;
+}
+string numberToLetter(string code){
+    string txt="";
+    string token;
+    stringstream ss(code);
+    while (ss>>token){
+        if(token=="/")
+        txt+=" ";
+        else{
+            stringstream nStr(token);
+            int num;
+            char xtr;
+            if(!(nStr>>num) || (nStr>>xtr) || num<1 || num>26)
+                return "| Invalid code!";
+            txt+=char('A'+num-1);
+        }
+    }
+    if (txt.empty())
+        return "| Enter at least one number!";
+    return txt;
+}
 int main (){
-    int choice, ft, decimal=0, value, rem, sft;
+    int choice, ft, value, rem, sft;
+    long long decimal=0;
     char digit;
     bool valid=true;
     string inp, binary="", hex="";
@@ -118,11 +156,18 @@ int main (){
     cout<<"| [2] NUMBER SYSTEMS"<<endl;
     cout<<"| [3] CLASSICAL CIPHERS"<<endl;
     cout<<"| [4] ASCII"<<endl;
+    cout<<"| [5] A1Z26 (NUMBER TO LETTER)"<<endl;
     cout<<"| [0] EXIT"<<endl;
-    cout<<"| Enter your choice: ";cin>>choice;cout<<endl;
-    while (choice<0 || choice>4){
-        cout<<"Invalid option!\n";
-        cin>>choice;
+    cout<<"| Enter your choice: "<<endl;
+    if (!(cin>>choice)){
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(),'\n');
+        cout<<"| Invalid input!\n";
+        continue;
+    }
+    if (choice<0 || choice>5){
+        cout<<"| Invalid option!\n";
+        continue;
     }
     if (choice==1){
         while (true){
@@ -265,22 +310,22 @@ int main (){
             cout<<"| [4] Instructions/What are Classical Ciphers?\n";
             cout<<"| [0] Back to main menu\n";
             cout<<"| Enter your choice: ";cin>>ft;cout<<endl;
-            cin.ignore(1000, '\n');
             if (ft==0)
             break;
             if (ft<1 || ft>4) {
                 cout << "Invalid option!\n";
                 continue;
                     }
+            cin.ignore(1000, '\n');
             if (ft==1){
                 cout<<"| Enter your message: ";
                 getline(cin, inp);cout<<endl;
                 cout<<"| Enter the shift (0-25): ";cin>>sft;cout<<endl;
-                cin.ignore(numeric_limits<streamsize>::max(), '\n');
                 while (sft<0 || sft>25){
                     cout<<"| Invalid shift!\n";
                     cin>>sft;
                 }
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
                 sft=-sft;
                 sft=((sft%26)+26)%26;
                 cout<<"Decoded message: "<<cCipher(inp, sft)<<endl;
@@ -348,10 +393,48 @@ int main (){
             }
         }
     }
-        else if (choice==0){
-            cout<<"| Transmission ended. Goodbye!";
+    else if (choice==5){
+        while (true){
+        cout<<"=============================\n";
+        cout<<"   A1Z26(NUMBER TO LETTER)\n";
+        cout<<"=============================\n";
+        cout<<"|\n";
+        cout<<"| Choose an option:\n";
+        cout<<"| [1] Number to letter\n";
+        cout<<"| [2] Letter to number\n";
+        cout<<"| [3] Manual\n";
+        cout<<"| [0] Back to main menu\n";
+        cout<<"| Enter your choice: ";cin>>ft;cout<<endl;
+        cin.ignore(numeric_limits<streamsize>::max(),'\n');
+        if (ft==0)
+        break;
+        if (ft<1 || ft>3) {
+            cout << "Invalid option!\n";
+            continue;
+            }
+        if (ft==1){
+            cout<<"| Enter text: ";
+            getline(cin, inp);
+            cout<<"| Encoded: "<<letterToNumber(inp)<<endl;
+        }
+        else if (ft==2){
+            cout<<"| Enter the numbers: ";
+            getline(cin, inp);
+            cout<<"| Decoded: "<<numberToLetter(inp)<<endl;
+        }
+        else if (ft==3){
+            cout<<"|A1Z26 replaces each letter with its position in the alphabet (A = 1, B = 2, ..., Z = 26).\n";
+            cout<<"|Encode: Replace letters with numbers. CAT → 3 1 20\n";
+            cout<<"|Decode: Replace numbers with letters. 3 1 20 → CAT\n| Use spaces between numbers and / between words.\n";
+        }
+        cout << "\n| Press Enter to return to the menu";
+        cin.get();
+    }
+}
+    else if (choice==0){
+        cout<<"| Transmission ended. Goodbye!";
         return 0;
         }
-}
+    }
     return 0;
 }
