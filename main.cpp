@@ -2,6 +2,7 @@
 #include <string>
 #include <sstream>
 #include <cctype>
+#include <limits>
 using namespace std;
 string letters="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 string morse[36]={".-", "-...", "-.-.", "-..", ".", "..-.", "--.", "....", "..", ".---",
@@ -92,7 +93,12 @@ int main (){
     cout<<"| [3] CLASSICAL CIPHERS"<<endl;
     cout<<"| [0] EXIT"<<endl;
     cout<<"| Enter your choice: ";cin>>choice;cout<<endl;
+    while (choice<0 || choice>3){
+        cout<<"Invalid option!\n";
+        cin>>choice;
+    }
     if (choice==1){
+        while (true){
         cout<<"===========================\n";
         cout<<"          MORSE CODE\n";
         cout<<"===========================\n";
@@ -100,7 +106,15 @@ int main (){
         cout<<"| Do you want to convert:\n";
         cout<<"| [1] From morse code to text\n";
         cout<<"| [2] From text to morse code\n";
+        cout<<"| [0] Back to main menu\n";
         cout<<"| Enter your choice: ";cin>>ft;cout<<endl;
+        cin.ignore(1000, '\n');
+            if (ft==0)
+                break;
+            if (ft<1 || ft>3) {
+                cout << "Invalid option!\n";
+                continue;
+                    }
             cin.ignore();
             if (ft==1)
             {cout<<"| Enter the morse code (spaces between letters, / between words): ";
@@ -113,7 +127,9 @@ int main (){
                 cout<<"| In morse code: "<<textToMorse(inp)<<endl;
             }
         }
+    }
     else if (choice==2){
+        while (true){
         cout<<"===========================\n";
         cout<<"       NUMBER SYSTEMS"<<endl;
         cout<<"===========================\n";
@@ -123,7 +139,15 @@ int main (){
         cout<<"| [2] From hexadecimal to decimal\n";
         cout<<"| [3] From decimal to binary\n";
         cout<<"| [4] From binary to decimal\n";
+        cout<<"| [0] Back to main menu\n";
         cout<<"| Enter your choice: ";cin>>ft;cout<<endl;
+        cin.ignore(1000, '\n');
+        if (ft==0)
+            break;
+        if (ft<1 || ft>3) {
+            cout << "Invalid option!\n";
+            continue;
+                }
         if (ft==1){
             string digits="0123456789ABCDEF";
             hex="";
@@ -200,6 +224,7 @@ int main (){
         else 
             cout<<"| Invalid binary number!\n";
                 }
+            }
         }
         else if (choice==3){
             while (true){
@@ -208,15 +233,16 @@ int main (){
             cout<<"==========================="<<endl;
             cout<<"|\n";
             cout<<"| Do you want to convert from:\n";
-            cout<<"| [1] Caesar Cipher\n";
-            cout<<"| [2] Atbash Cipher\n";
-            cout<<"| [3] Instructions/What are Classical Ciphers?\n";
+            cout<<"| [1] Caesar Cipher decode\n";
+            cout<<"| [2] Caesar Cipher encode\n";
+            cout<<"| [3] Atbash Cipher\n";
+            cout<<"| [4] Instructions/What are Classical Ciphers?\n";
             cout<<"| [0] Back to main menu\n";
             cout<<"| Enter your choice: ";cin>>ft;cout<<endl;
             cin.ignore(1000, '\n');
             if (ft==0)
             break;
-            if (ft < 1 || ft > 3) {
+            if (ft<1 || ft>4) {
                 cout << "Invalid option!\n";
                 continue;
                     }
@@ -224,16 +250,33 @@ int main (){
                 cout<<"| Enter your message: ";
                 getline(cin, inp);cout<<endl;
                 cout<<"| Enter the shift (0-25): ";cin>>sft;cout<<endl;
-                cin.ignore(1000, '\n');
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                while (sft<0 || sft>25){
+                    cout<<"| Invalid shift!\n";
+                    cin>>sft;
+                }
+                sft=-sft;
                 sft=((sft%26)+26)%26;
-                cout<<"| Encoded message: "<<cCipher(inp, sft)<<endl;
+                cout<<"Decoded message: "<<cCipher(inp, sft)<<endl;
             }
             else if (ft==2){
                 cout<<"| Enter your message: ";
                 getline(cin, inp);cout<<endl;
-                cout<<"Encodeed/Decoded message: "<<aCipher(inp)<<endl;
+                cout<<"| Enter the shift (0-25): ";cin>>sft;cout<<endl;
+                while (sft<0 || sft>25) {
+                    cout << "Invalid option!\n";
+                    cin>>sft;
+                }
+                cin.ignore(1000, '\n');
+                sft=((sft%26)+26)%26;
+                cout<<"| Encoded message: "<<cCipher(inp, sft)<<endl;
             }
             else if (ft==3){
+                cout<<"| Enter your message: ";
+                getline(cin, inp);cout<<endl;
+                cout<<"Encodeed/Decoded message: "<<aCipher(inp)<<endl;
+            }
+            else if (ft==4){
                 cout<<"=====MANUAL=====\n";
                 cout<<"| WHAT IS A CIPHER?\n| A cipher changes a message into a coded form.\n| It can be used to hide a message from casual readers\n.";
                 cout<<endl;
