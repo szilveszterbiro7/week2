@@ -57,7 +57,7 @@ string cCipher (string txt, int sft){
     for (int i=0; i<txt.length(); i++) {
         char c=toupper(txt[i]);
         if (c>='A' && c<='Z'){
-        c=(c-'A'+sft)%26+'A';
+        c=(c-'A'+sft+26)%26+'A';
         }
         result+=c;
     }
@@ -108,7 +108,7 @@ int main (){
     while (true){
     cout<<"=========================================="<<endl;
     cout<<"| * * * * * * * * SIGNAL * * * * * * * * |"<<endl;
-    cout<<"|           DECODING & ENCODIG           |"<<endl;
+    cout<<"|           DECODING & ENCODING          |"<<endl;
     cout<<"|                 BUREAU                 |"<<endl;
     cout<<"|----------------Est. 1924---------------|"<<endl;
     cout<<"=========================================="<<endl;
@@ -138,11 +138,10 @@ int main (){
         cin.ignore(1000, '\n');
             if (ft==0)
                 break;
-            if (ft<1 || ft>3) {
+            if (ft<1 || ft>2) {
                 cout << "Invalid option!\n";
                 continue;
                     }
-            cin.ignore();
             if (ft==1)
             {cout<<"| Enter the morse code (spaces between letters, / between words): ";
                 getline(cin, inp);
@@ -171,7 +170,7 @@ int main (){
         cin.ignore(1000, '\n');
         if (ft==0)
             break;
-        if (ft<1 || ft>3) {
+        if (ft<1 || ft>4) {
             cout << "Invalid option!\n";
             continue;
                 }
@@ -301,7 +300,7 @@ int main (){
             else if (ft==3){
                 cout<<"| Enter your message: ";
                 getline(cin, inp);cout<<endl;
-                cout<<"Encodeed/Decoded message: "<<aCipher(inp)<<endl;
+                cout<<"Encoded/Decoded message: "<<aCipher(inp)<<endl;
             }
             else if (ft==4){
                 cout<<"=====MANUAL=====\n";
@@ -337,16 +336,20 @@ int main (){
                 cout<<"| Enter your message: ";
                 getline(cin, inp);cout<<endl;
                 cout<<"| Encoded message: "<<txtToAscii(inp)<<endl;
+                cout<<"| Press enter to continue ";
+                    cin.get();
             }
             else if (ft==2){
                 cout<<"| Enter the ASCII numbers: ";
                 getline(cin, inp);cout<<endl;
                 cout<<" Decoded message: "<<asciiToTxt(inp)<<endl;
+                cout<<"| Press enter to continue ";
+                    cin.get();
             }
         }
     }
         else if (choice==0){
-            cout<<"| Transmision ended. Goodbye!";
+            cout<<"| Transmission ended. Goodbye!";
         return 0;
         }
 }
