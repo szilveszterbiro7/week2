@@ -74,6 +74,32 @@ string aCipher (string txt){
     }
     return result;
 }
+string txtToAscii (string txt){
+    string result="";
+    for(int i=0; i<txt.length(); i++){
+    result+=to_string((int)(unsigned char)txt[i]);
+    if(i<txt.length()-1){
+        result+=" ";
+        }
+    }
+    return result;
+}
+string asciiToTxt (string code){
+    istringstream inp (code);
+    string result="";
+    int cd;
+    while (inp>>cd){
+        if(cd<0 || cd>127)
+            return"| ASCII values must be between 0-127!";
+        result += (char)cd;
+    }
+        if(!inp.eof())
+            return"| The numbers must be separated with spaces";
+        if(result.empty())
+        return" |Enter at least 1 ASCII number"; 
+    return result;
+}
+
 int main (){
     int choice, ft, decimal=0, value, rem, sft;
     char digit;
@@ -91,9 +117,10 @@ int main (){
     cout<<"| [1] MORSE CODE"<<endl;
     cout<<"| [2] NUMBER SYSTEMS"<<endl;
     cout<<"| [3] CLASSICAL CIPHERS"<<endl;
+    cout<<"| [4] ASCII"<<endl;
     cout<<"| [0] EXIT"<<endl;
     cout<<"| Enter your choice: ";cin>>choice;cout<<endl;
-    while (choice<0 || choice>3){
+    while (choice<0 || choice>4){
         cout<<"Invalid option!\n";
         cin>>choice;
     }
@@ -232,7 +259,7 @@ int main (){
             cout<<"      CLASSICAL CIPHERS"<<endl;
             cout<<"==========================="<<endl;
             cout<<"|\n";
-            cout<<"| Do you want to convert from:\n";
+            cout<<"| Choose an option:\n";
             cout<<"| [1] Caesar Cipher decode\n";
             cout<<"| [2] Caesar Cipher encode\n";
             cout<<"| [3] Atbash Cipher\n";
@@ -287,7 +314,37 @@ int main (){
             cout << "\n| Press Enter to return to the menu";
         cin.get();
         }
+    }
+        else if(choice==4){
+            while (true){
+            cout<<"=========================\n";
+            cout<<"         ASCII\n";
+            cout<<"=========================\n";
+            cout<<"|\n";
+            cout<<"| Choose an option: \n";
+            cout<<"| [1] Text to ASCII\n";
+            cout<<"| [2] ASCII to text\n";
+            cout<<"| [0] Back to main menu\n";
+            cout<<"| Enter your choice: ";cin>>ft;cout<<endl;
+            cin.ignore(numeric_limits<streamsize>::max(),'\n');
+            if (ft==0)
+            break;
+            if (ft<0 || ft>2){
+                cout<<"Invalid option!\n";
+                continue;
+                }
+            if (ft==1){
+                cout<<"| Enter your message: ";
+                getline(cin, inp);cout<<endl;
+                cout<<"| Encoded message: "<<txtToAscii(inp)<<endl;
+            }
+            else if (ft==2){
+                cout<<"| Enter the ASCII numbers: ";
+                getline(cin, inp);cout<<endl;
+                cout<<" Decoded message: "<<asciiToTxt(inp)<<endl;
+            }
         }
+    }
         else if (choice==0){
             cout<<"| Transmision ended. Goodbye!";
         return 0;
