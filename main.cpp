@@ -11,6 +11,11 @@ string morse[36]={".-", "-...", "-.-.", "-..", ".", "..-.", "--.", "....", "..",
     "-----", ".----", "..---", "...--", "....-",
     ".....", "-....", "--...", "---..", "----."
     };
+string nato[26]={
+    "Alfa", "Bravo", "Charlie", "Delta", "Echo", "Foxtrot", "Golf", "Hotel", "India", "Juliett", "Kilo",
+    "Lima", "Mike", "November", "Oscar", "Papa", "Quebec", "Romeo", "Sierra", "Tango", "Uniform", "Victor",
+    "Whiskey", "X-ray", "Yankee", "Zulu"
+    };
 string textToMorse(string text) {
    string result="";
    for (int i=0; i<text.size(); i++){
@@ -137,12 +142,47 @@ string numberToLetter(string code){
         return "| Enter at least one number!";
     return txt;
 }
+string txtToNato(string txt){
+    string result="";
+    for(int i=0; i<txt.length(); i++){
+        char c=toupper(txt[i]);
+        if (c>='A' && c<='Z')
+            result+=nato[c-'A']+" ";
+        else if (c==' ')
+        result+="/ ";
+    }
+    return result;
+}
+string natoToTxt(string code){
+    string result="";
+    string wd="";
+    stringstream ss(code);
+    while (ss>>wd){
+        if (wd=="/"){
+        result+=" ";
+        continue;
+        }
+        for(int i=0; i<wd.length(); i++)
+            wd[i]=toupper(wd[i]);
+        for (int i=0; i<26; i++){
+            string natowd=nato[i];
+        for (int a=0; a<natowd.length(); a++){
+            natowd[a]=toupper(natowd[a]);
+        }
+        if (wd==natowd){
+            result+=char('A'+i);
+            break;
+            }
+        }
+    }
+    return result;
+}
 int main (){
     int choice, ft, value, rem, sft;
     long long decimal=0;
     char digit;
     bool valid=true;
-    string inp, binary="", hex="";
+    string inp, binary="", hex="", txt, code;
     while (true){
     cout<<"=========================================="<<endl;
     cout<<"| * * * * * * * * SIGNAL * * * * * * * * |"<<endl;
@@ -157,15 +197,16 @@ int main (){
     cout<<"| [3] CLASSICAL CIPHERS"<<endl;
     cout<<"| [4] ASCII"<<endl;
     cout<<"| [5] A1Z26 (NUMBER TO LETTER)"<<endl;
+    cout<<"| [6] NATO PHONETIC ALPHABET"<<endl;
     cout<<"| [0] EXIT"<<endl;
-    cout<<"| Enter your choice: "<<endl;
+    cout<<"| Enter your choice: ";
     if (!(cin>>choice)){
         cin.clear();
         cin.ignore(numeric_limits<streamsize>::max(),'\n');
         cout<<"| Invalid input!\n";
         continue;
     }
-    if (choice<0 || choice>5){
+    if (choice<0 || choice>6){
         cout<<"| Invalid option!\n";
         continue;
     }
@@ -400,8 +441,8 @@ int main (){
         cout<<"=============================\n";
         cout<<"|\n";
         cout<<"| Choose an option:\n";
-        cout<<"| [1] Number to letter\n";
-        cout<<"| [2] Letter to number\n";
+        cout<<"| [1] Letter to number\n";
+        cout<<"| [2] Number to letter\n";
         cout<<"| [3] Manual\n";
         cout<<"| [0] Back to main menu\n";
         cout<<"| Enter your choice: ";cin>>ft;cout<<endl;
@@ -423,14 +464,62 @@ int main (){
             cout<<"| Decoded: "<<numberToLetter(inp)<<endl;
         }
         else if (ft==3){
+            cout<<"====MANUAL====\n";
             cout<<"|A1Z26 replaces each letter with its position in the alphabet (A = 1, B = 2, ..., Z = 26).\n";
-            cout<<"|Encode: Replace letters with numbers. CAT → 3 1 20\n";
-            cout<<"|Decode: Replace numbers with letters. 3 1 20 → CAT\n| Use spaces between numbers and / between words.\n";
+            cout<<"|Encode: Replace letters with numbers. CAT-3 1 20\n";
+            cout<<"|Decode: Replace numbers with letters. 3 1 20-CAT\n| Use spaces between numbers and / between words.\n";
         }
         cout << "\n| Press Enter to return to the menu";
         cin.get();
     }
 }
+    else if (choice==6){
+        while (true){
+        cout<<"====================\n";
+        cout<<"        NATO\n";
+        cout<<"====================\n";
+        cout<<"|\n";
+        cout<<"| Choose an option:\n";
+        cout<<"| [1] Text to NATO\n";
+        cout<<"| [2] NATO to text\n";
+        cout<<"| [3] Manual\n";
+        cout<<"| [0] Back to main menu\n";
+        cout<<"| Enter your choice: ";
+        if (!(cin>>ft)){
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(),'\n');
+            cout<<"| Invalid input!\n";
+            continue;
+        }
+        cin.ignore(numeric_limits<streamsize>::max(),'\n');
+        if (ft==0)
+        break;
+        if (ft<0 || ft>3){
+            cout<<"Invalid option!\n";
+            continue;
+            }
+        if (ft==1){
+            cout<<"| Enter text: ";
+            getline(cin,txt);
+            cout<<"| In NATO: "<<txtToNato(txt)<<endl;
+        }
+        else if (ft==2){
+            cout<<"| Enter NATO (Use / between words): ";
+            getline(cin, code);
+            cout<<"| In text: "<<natoToTxt(code)<<endl;
+            }
+        else if (ft==3){
+            cout<<"====MANUAL====\n";
+            cout<<"| The NATO Phonetic Alphabet converts letters into predefined words to make messages easier to understand and communicate.\n";
+            cout<<"| - Text to NATO: Enter a normal message to convert each letter into its NATO word (HELLO-Hotel Echo Lima Lima Oscar).\n";
+            cout<<"| - NATO to Text: Enter NATO words separated by spaces to decode them back into letters.\n";
+            cout<<"| - Use / to separate words in a message.\n";
+            cout<<"| - Only letters A-Z and spaces are supported. Numbers and punctuation are ignored.\n";
+            }
+            cout << "\n| Press Enter to return to the menu";
+        cin.get();
+        }
+    }
     else if (choice==0){
         cout<<"| Transmission ended. Goodbye!";
         return 0;
