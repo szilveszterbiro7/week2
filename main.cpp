@@ -3,6 +3,7 @@
 #include <sstream>
 #include <cctype>
 #include <limits>
+#include <vector>
 using namespace std;
 string letters="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 string morse[36]={".-", "-...", "-.-.", "-..", ".", "..-.", "--.", "....", "..", ".---",
@@ -177,21 +178,41 @@ string natoToTxt(string code){
     }
     return result;
 }
+string vig(string txt, string k, bool decd){
+    string result="";
+    int index=0;
+    for (int i=0; i<txt.length(); i++){
+        char c= toupper(txt[i]);
+        if(c>='A' && c<='Z'){
+            int l=c-'A';
+            int sft=toupper(k[index%k.length()])-'A';
+        
+        if (decd)
+            sft=-sft;
+        char conv=(l+sft+26)%26+'A';
+        result+=conv;
+        index++;
+        }
+        else
+            result+=c;
+    }
+    return result;
+}
 int main (){
     int choice, ft, value, rem, sft;
     long long decimal=0;
     char digit;
     bool valid=true;
-    string inp, binary="", hex="", txt, code;
+    string inp, binary="", hex="", txt, code, k;
     while (true){
-    cout<<"=========================================="<<endl;
-    cout<<"| * * * * * * * * SIGNAL * * * * * * * * |"<<endl;
-    cout<<"|           DECODING & ENCODING          |"<<endl;
-    cout<<"|                 BUREAU                 |"<<endl;
-    cout<<"|----------------Est. 1924---------------|"<<endl;
-    cout<<"=========================================="<<endl;
+    cout<<"======================================================="<<endl;
+    cout<<"| * * * * * * * * * * S I G N A L * * * * * * * * * * |"<<endl;
+    cout<<"|                 DECODING & ENCODING                 |"<<endl;
+    cout<<"|                       BUREAU                        |"<<endl;
+    cout<<"|----------------------Est. 1924----------------------|"<<endl;
+    cout<<"======================================================="<<endl;
     cout<<"|"<<endl;
-    cout<<"=========Choose a type of message========="<<endl;
+    cout<<"=============== Choose a type of message =============="<<endl;
     cout<<"| [1] MORSE CODE"<<endl;
     cout<<"| [2] NUMBER SYSTEMS"<<endl;
     cout<<"| [3] CLASSICAL CIPHERS"<<endl;
@@ -213,7 +234,7 @@ int main (){
     if (choice==1){
         while (true){
         cout<<"===========================\n";
-        cout<<"          MORSE CODE\n";
+        cout<<"|         MORSE CODE      |\n";
         cout<<"===========================\n";
         cout<<"|\n";
         cout<<"| Do you want to convert:\n";
@@ -243,7 +264,7 @@ int main (){
     else if (choice==2){
         while (true){
         cout<<"===========================\n";
-        cout<<"       NUMBER SYSTEMS"<<endl;
+        cout<<"|      NUMBER SYSTEMS     |"<<endl;
         cout<<"===========================\n";
         cout<<"|\n";
         cout<<"| Do you want to convert:\n";
@@ -341,24 +362,27 @@ int main (){
         else if (choice==3){
             while (true){
             cout<<"==========================="<<endl;
-            cout<<"      CLASSICAL CIPHERS"<<endl;
+            cout<<"|     CLASSICAL CIPHERS   |"<<endl;
             cout<<"==========================="<<endl;
             cout<<"|\n";
             cout<<"| Choose an option:\n";
             cout<<"| [1] Caesar Cipher decode\n";
             cout<<"| [2] Caesar Cipher encode\n";
             cout<<"| [3] Atbash Cipher\n";
-            cout<<"| [4] Instructions/What are Classical Ciphers?\n";
+            cout<<"| [4] Vigenere Cipher encode\n";
+            cout<<"| [5] Vigenere Cipher decode\n";
+            cout<<"| [6] Instructions/What are Classical Ciphers?\n";
             cout<<"| [0] Back to main menu\n";
             cout<<"| Enter your choice: ";cin>>ft;cout<<endl;
             if (ft==0)
             break;
-            if (ft<1 || ft>4) {
-                cout << "Invalid option!\n";
+            if (ft<1 || ft>6) {
+                cout << "| Invalid option!\n";
                 continue;
                     }
             cin.ignore(1000, '\n');
             if (ft==1){
+                cout<<"=====CAESAR CIPHER=====\n";
                 cout<<"| Enter your message: ";
                 getline(cin, inp);cout<<endl;
                 cout<<"| Enter the shift (0-25): ";cin>>sft;cout<<endl;
@@ -372,6 +396,7 @@ int main (){
                 cout<<"Decoded message: "<<cCipher(inp, sft)<<endl;
             }
             else if (ft==2){
+                cout<<"=====CAESAR CIPHER=====\n";
                 cout<<"| Enter your message: ";
                 getline(cin, inp);cout<<endl;
                 cout<<"| Enter the shift (0-25): ";cin>>sft;cout<<endl;
@@ -384,17 +409,44 @@ int main (){
                 cout<<"| Encoded message: "<<cCipher(inp, sft)<<endl;
             }
             else if (ft==3){
+                cout<<"=====ATBASH CIPHER=====\n";
                 cout<<"| Enter your message: ";
                 getline(cin, inp);cout<<endl;
-                cout<<"Encoded/Decoded message: "<<aCipher(inp)<<endl;
+                cout<<"| Encoded/Decoded message: "<<aCipher(inp)<<endl;
             }
-            else if (ft==4){
+            else if (ft==4 || ft==5){
+                cout<<"=====VIGENERE CIPHER=====\n";
+                cout<<"| Enter your text: ";
+                getline(cin, inp);cout<<endl;
+                cout<<"| Enter the keyword: ";
+                getline(cin, k);cout<<endl;
+                bool val=true;
+                for(char c:k){
+                    if (!isalpha(c)) {
+                        val=false;
+                        break;
+                    }
+                }
+                if (k.empty() || !val){
+                    cout<<"| Invalid keyword! Use letters A-Z only!\n";
+                    continue;
+                }
+                if(ft==4){
+                cout<<"| Encoded message: "<<vig(inp, k, false)<<endl;
+                }
+                else if (ft==5){
+                    cout<<"| Decoded message: "<<vig(inp, k, true)<<endl;
+                }
+            }
+            else if (ft==6){
                 cout<<"=====MANUAL=====\n";
                 cout<<"| WHAT IS A CIPHER?\n| A cipher changes a message into a coded form.\n| It can be used to hide a message from casual readers\n.";
                 cout<<endl;
                 cout<<"| 1.CAESAR CIPHER\n| Each letter is shifted through the alphabet.\n| Example: HELLO with a shift of 3 becomes KHOOR.\n| You can choose the value of the shift.\n";
                 cout<<endl;
                 cout<<"| 2.ATBASH CIPHER\n| The alphabet is reversed: A becomes Z, B becomes Y.\n| Example: HELLO becomes SVOOL.\n";
+                cout<<endl;
+                cout<<"| 3.VIGENERE CIPHER\n| Each letter is shifted according to a repeating keyword based on a chart.\n| Example: HELLO with the keyword KEY becomes RIJVS.\n";
             }
             cout << "\n| Press Enter to return to the menu";
         cin.get();
@@ -403,7 +455,7 @@ int main (){
         else if(choice==4){
             while (true){
             cout<<"=========================\n";
-            cout<<"         ASCII\n";
+            cout<<"|        ASCII          |\n";
             cout<<"=========================\n";
             cout<<"|\n";
             cout<<"| Choose an option: \n";
@@ -437,7 +489,7 @@ int main (){
     else if (choice==5){
         while (true){
         cout<<"=============================\n";
-        cout<<"   A1Z26(NUMBER TO LETTER)\n";
+        cout<<"|  A1Z26(NUMBER TO LETTER)  |\n";
         cout<<"=============================\n";
         cout<<"|\n";
         cout<<"| Choose an option:\n";
@@ -464,7 +516,7 @@ int main (){
             cout<<"| Decoded: "<<numberToLetter(inp)<<endl;
         }
         else if (ft==3){
-            cout<<"====MANUAL====\n";
+            cout<<"=====MANUAL=====\n";
             cout<<"|A1Z26 replaces each letter with its position in the alphabet (A = 1, B = 2, ..., Z = 26).\n";
             cout<<"|Encode: Replace letters with numbers. CAT-3 1 20\n";
             cout<<"|Decode: Replace numbers with letters. 3 1 20-CAT\n| Use spaces between numbers and / between words.\n";
@@ -475,9 +527,9 @@ int main (){
 }
     else if (choice==6){
         while (true){
-        cout<<"====================\n";
-        cout<<"        NATO\n";
-        cout<<"====================\n";
+        cout<<"========================\n";
+        cout<<"|         NATO\n       |";
+        cout<<"========================\n";
         cout<<"|\n";
         cout<<"| Choose an option:\n";
         cout<<"| [1] Text to NATO\n";
@@ -495,7 +547,7 @@ int main (){
         if (ft==0)
         break;
         if (ft<0 || ft>3){
-            cout<<"Invalid option!\n";
+            cout<<"| Invalid option!\n";
             continue;
             }
         if (ft==1){
@@ -509,7 +561,7 @@ int main (){
             cout<<"| In text: "<<natoToTxt(code)<<endl;
             }
         else if (ft==3){
-            cout<<"====MANUAL====\n";
+            cout<<"=====MANUAL=====\n";
             cout<<"| The NATO Phonetic Alphabet converts letters into predefined words to make messages easier to understand and communicate.\n";
             cout<<"| - Text to NATO: Enter a normal message to convert each letter into its NATO word (HELLO-Hotel Echo Lima Lima Oscar).\n";
             cout<<"| - NATO to Text: Enter NATO words separated by spaces to decode them back into letters.\n";
