@@ -25,8 +25,8 @@ string textToMorse(string text) {
             result+="/ ";
         }
         else {
-            int pos=letters.find(c);
-            if (pos !=-1)
+            size_t pos=letters.find(c);
+            if (pos !=string::npos)
             result += morse[pos] + " ";
         } 
     }
@@ -205,12 +205,42 @@ bool rd (T &out){
     cin.ignore(numeric_limits<streamsize>::max(),'\n');
     return ok;
 }
+struct hist{
+    string type;
+    string og;
+    string result;
+};
+vector <hist> history;
+void addHist(string type, string og, string result){
+    hist entry;
+    entry.type=type;
+    entry.og=og;
+    entry.result=result;
+    history.push_back(entry);
+}
+void shwHist (){
+    cout<<"===== MESSAGE HISTORY =====\n";
+    if (history.empty()){
+        cout<<"| No conversions yet.\n";
+        return;
+    }
+    for (int i=0; i<history.size(); i++){
+        cout<<"\n["<<i+1<<"] "<<history[i].type<<endl;
+        cout<<"Original: "<<history[i].og<<endl;
+        cout<<"Result: "<<history[i].result<<endl;
+        cout<<"---------------------------------"<<endl;
+    }
+}
+void clrHist(){
+    history.clear();
+    cout<<"History cleared successfully!\n";
+}
 int main (){
     int choice, ft, value, rem, sft;
-    long long decimal=0;
+    long long decimal=0, dec;
     char digit;
     bool valid=true;
-    string inp, binary="", hex="", txt, code, k;
+    string inp, binary="", hex="", txt, code, k, result;
     while (true){
     cout<<"| | | | | | | | | * * * * * * * * * * | | | | | | | | |"<<endl;
     cout<<"======================================================="<<endl;
@@ -228,6 +258,7 @@ int main (){
     cout<<"| [4] ASCII"<<endl;
     cout<<"| [5] A1Z26 (NUMBER TO LETTER)"<<endl;
     cout<<"| [6] NATO PHONETIC ALPHABET"<<endl;
+    cout<<"| [7] MESSAGE HISTORY"<<endl;
     cout<<"| [0] EXIT"<<endl;
     cout<<"| Enter your choice: ";
     if (!(cin>>choice)){
@@ -236,7 +267,7 @@ int main (){
         cout<<"\n| Invalid input!\n";
         continue;
     }
-    if (choice<0 || choice>6){
+    if (choice<0 || choice>7){
         cout<<"\n| Invalid option!\n";
         continue;
     }
@@ -265,13 +296,17 @@ int main (){
             {cout<<"===== MORSE TO TEXT =====\n";
                 cout<<"| Enter the morse code (spaces between letters, / between words): ";
                 getline(cin, inp);
-                cout<<"| In text: "<<morseToText(inp)<<endl;
+                result=morseToText(inp);
+                cout<<"| In text: "<<result<<endl;
+                addHist ("Morse code-Decode", inp, result);
             }
             else if (ft==2)
             {cout<<"===== TEXT TO MORSE =====\n";
                 cout<<"| Enter the text: ";
                 getline (cin, inp);
-                cout<<"| In morse code: "<<textToMorse(inp)<<endl;
+                result=textToMorse(inp);
+                cout<<"| In morse code: "<<result<<endl;
+                addHist ("Morse code-Encode", inp, result);
             }
         }
     }
@@ -301,11 +336,19 @@ int main (){
         if (ft==1){
             string digits="0123456789ABCDEF";
             hex="";
-            cout<<"| Enter the number: ";cin>>decimal;cout<<endl;
+            cout<<"| Enter the number: ";
+            if (!rd(decimal)) {
+                cout<<"| Invalid number!\n";
+                continue;
+                }cout<<endl;
             while (decimal<0){
                 cout<<"| Enter a positive number!\n";
-                cin>>decimal;
+                if (!rd(decimal)) {
+                cout<<"| Invalid number!\n";
+                continue;
+                }
             }
+            dec=decimal;
             if (decimal==0)
                 hex="0";
             else{
@@ -316,8 +359,8 @@ int main (){
                 }
             }
             cout<<"| Hexadecimal: "<<hex<<endl;
+            addHist ("Hexadecimal-Encode", to_string(dec), hex);
         }
-    
         else if (ft==2) {
             decimal=0;
             valid=true;
@@ -336,18 +379,29 @@ int main (){
                 }
                 decimal=decimal*16+value;
             }
-        if (valid)
+        if (valid){
             cout<<"| Decimal: "<<decimal<<endl;
+            addHist ("Hexadecimal-Decode", hex, to_string(decimal));
+        }
         else 
             cout<<"| Invalid hexadecimal number!\n";
         }
         else if (ft==3) {
-            cout<<"| Enter the number: ";cin>>decimal;cout<<endl;
+            cout<<"| Enter the number: ";
+            if (!rd(decimal)) {
+                cout<<"| Invalid number!\n";
+                continue;
+                }
+            cout<<endl;
             binary="";
             while (decimal<0){
                 cout<<"| Enter a positive number!\n";
-                cin>>decimal;
+                if (!rd(decimal)) {
+                cout<<"| Invalid number!\n";
+                continue;
+                }
             }
+            dec=decimal;
             if (decimal==0)
                 binary="0";
             else {
@@ -357,6 +411,7 @@ int main (){
                 }
             }
             cout<<"| Binary: "<<binary<<endl;
+            addHist ("Binary-Encode", to_string(dec), binary);
         }
         else if (ft==4) {
             decimal=0;
@@ -369,9 +424,11 @@ int main (){
                 }
             decimal=decimal*2+(binary[i]-'0');
         }
-        if (valid)
+        if (valid){
             cout<<"| Decimal: "<<decimal<<endl;
-        else 
+            addHist ("Binary-Decode", binary, to_string(decimal));
+        }
+        else
             cout<<"| Invalid binary number!\n";
                 }
             }
@@ -414,7 +471,9 @@ int main (){
                 cin.ignore(numeric_limits<streamsize>::max(), '\n');
                 sft=-sft;
                 sft=((sft%26)+26)%26;
-                cout<<"Decoded message: "<<cCipher(inp, sft)<<endl;
+                result=cCipher(inp, sft);
+                cout<<"Decoded message: "<<result<<endl;
+                addHist ("Caesar Cipher-Decode", inp, result);
             }
             else if (ft==2){
                 cout<<"=====CAESAR CIPHER=====\n";
@@ -427,13 +486,17 @@ int main (){
                 }
                 cin.ignore(1000, '\n');
                 sft=((sft%26)+26)%26;
-                cout<<"| Encoded message: "<<cCipher(inp, sft)<<endl;
+                result=cCipher(inp, sft);
+                cout<<"| Encoded message: "<<result<<endl;
+                addHist ("Caesar Cipher-Encode", inp, result);
             }
             else if (ft==3){
                 cout<<"=====ATBASH CIPHER=====\n";
                 cout<<"| Enter your message: ";
                 getline(cin, inp);cout<<endl;
-                cout<<"| Encoded/Decoded message: "<<aCipher(inp)<<endl;
+                result=aCipher(inp);
+                cout<<"| Encoded/Decoded message: "<<result<<endl;
+                addHist ("Atbash Cipher-Encode/Decode", inp, result);
             }
             else if (ft==4 || ft==5){
                 cout<<"=====VIGENERE CIPHER=====\n";
@@ -453,10 +516,14 @@ int main (){
                     continue;
                 }
                 if(ft==4){
-                cout<<"| Encoded message: "<<vig(inp, k, false)<<endl;
-                }
+                    result=vig(inp, k, false);
+                    cout<<"| Encoded message: "<<result<<endl;
+                    addHist ("Vigenere-Encode", inp, result);
+                    }
                 else if (ft==5){
-                    cout<<"| Decoded message: "<<vig(inp, k, true)<<endl;
+                    result=vig(inp, k, true);
+                    cout<<"| Decoded message: "<<result<<endl;
+                    addHist ("Vigenere-Decode", inp, result);
                 }
             }
             else if (ft==6){
@@ -498,7 +565,9 @@ int main (){
                 cout<<"===== TEXT TO ASCII =====\n";
                 cout<<"| Enter your message: ";
                 getline(cin, inp);cout<<endl;
-                cout<<"| Encoded message: "<<txtToAscii(inp)<<endl;
+                result=txtToAscii(inp);
+                cout<<"| Encoded message: "<<result<<endl;
+                addHist ("ASCII-Encode", inp, result);
                 cout<<"| Press enter to continue ";
                     cin.get();
             }
@@ -506,7 +575,10 @@ int main (){
                 cout<<"===== ASCII TO TEXT =====\n";
                 cout<<"| Enter the ASCII numbers: ";
                 getline(cin, inp);cout<<endl;
-                cout<<" Decoded message: "<<asciiToTxt(inp)<<endl;
+                result=asciiToTxt(inp);
+                cout<<" Decoded message: "<<result<<endl;
+                if (!result.empty() && result[0] !='|')
+                addHist ("ASCII-Decode", inp, result);
                 cout<<"| Press enter to continue ";
                     cin.get();
             }
@@ -531,20 +603,25 @@ int main (){
         if (ft==0)
         break;
         if (ft<1 || ft>3) {
-            cout << "| Invalid option!\n";
+            cout << "\n| Invalid option!\n";
             continue;
             }
         if (ft==1){
             cout<<"===== LETTER TO NUMBER =====\n";
             cout<<"| Enter text: ";
             getline(cin, inp);
-            cout<<"| Encoded: "<<letterToNumber(inp)<<endl;
+            result=letterToNumber(inp);
+            cout<<"| Encoded: "<<result<<endl;
+            addHist ("A1Z26-Encode", inp, result);
         }
         else if (ft==2){
             cout<<"===== NUMBER TO LETTER =====\n";
             cout<<"| Enter the numbers: ";
             getline(cin, inp);
-            cout<<"| Decoded: "<<numberToLetter(inp)<<endl;
+            result=numberToLetter(inp);
+            cout<<"| Decoded: "<<result<<endl;
+            if(!result.empty() && result[0] !='|')
+            addHist ("A1Z26-Decode", inp, result);
         }
         else if (ft==3){
             cout<<"===== MANUAL =====\n";
@@ -585,13 +662,17 @@ int main (){
             cout<<"===== TEXT TO NATO =====\n";
             cout<<"| Enter text: ";
             getline(cin,txt);
-            cout<<"| In NATO: "<<txtToNato(txt)<<endl;
+            result=txtToNato(txt);
+            cout<<"| In NATO: "<<result<<endl;
+            addHist ("NATO-Encode", txt, result);
         }
         else if (ft==2){
             cout<<"===== NATO TO TEXT =====\n";
             cout<<"| Enter NATO (Use / between words): ";
             getline(cin, code);
-            cout<<"| In text: "<<natoToTxt(code)<<endl;
+            result=natoToTxt(code);
+            cout<<"| In text: "<<result<<endl;
+            addHist ("NATO-Decode", code, result);
             }
         else if (ft==3){
             cout<<"=====MANUAL=====\n";
@@ -603,6 +684,35 @@ int main (){
             }
             cout << "\n| Press Enter to return to the menu";
         cin.get();
+        }
+    }
+    else if (choice==7){
+        while (true){
+        cout<<"===============================\n";
+        cout<<"|-------MESSAGE HISTORY-------|\n";
+        cout<<"===============================\n";
+        cout<<"|\n";
+        cout<<"----- Choose an option: -----\n";
+        cout<<"| [1] View history\n";
+        cout<<"| [2] Clear history\n";
+        cout<<"| [0] Back to main menu\n";
+        cout<<"| Enter your choice: ";
+        if (!rd(ft)){
+            cout<<"\n| Invalid input!\n";
+            continue;
+        }
+        if (ft==0)
+        break;
+        if (ft<0 || ft>2){
+            cout<<"\n| Invalid option!\n";
+            continue;
+        }
+        if (ft==1){
+            shwHist();
+        }
+        else if (ft==2){
+            clrHist();
+        }
         }
     }
     else if (choice==0){
