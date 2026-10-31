@@ -198,6 +198,13 @@ string vig(string txt, string k, bool decd){
     }
     return result;
 }
+template <typename T>
+bool rd (T &out){
+    bool ok=static_cast<bool>(cin>>out);
+    if (!ok) cin.clear();
+    cin.ignore(numeric_limits<streamsize>::max(),'\n');
+    return ok;
+}
 int main (){
     int choice, ft, value, rem, sft;
     long long decimal=0;
@@ -205,12 +212,14 @@ int main (){
     bool valid=true;
     string inp, binary="", hex="", txt, code, k;
     while (true){
+    cout<<"| | | | | | | | | * * * * * * * * * * | | | | | | | | |"<<endl;
     cout<<"======================================================="<<endl;
     cout<<"| * * * * * * * * * * S I G N A L * * * * * * * * * * |"<<endl;
     cout<<"|                 DECODING & ENCODING                 |"<<endl;
     cout<<"|                       BUREAU                        |"<<endl;
     cout<<"|----------------------Est. 1924----------------------|"<<endl;
     cout<<"======================================================="<<endl;
+    cout<<"| | | | | | | | | * * * * * * * * * * | | | | | | | | |"<<endl;
     cout<<"|"<<endl;
     cout<<"=============== Choose a type of message =============="<<endl;
     cout<<"| [1] MORSE CODE"<<endl;
@@ -224,38 +233,43 @@ int main (){
     if (!(cin>>choice)){
         cin.clear();
         cin.ignore(numeric_limits<streamsize>::max(),'\n');
-        cout<<"| Invalid input!\n";
+        cout<<"\n| Invalid input!\n";
         continue;
     }
     if (choice<0 || choice>6){
-        cout<<"| Invalid option!\n";
+        cout<<"\n| Invalid option!\n";
         continue;
     }
     if (choice==1){
         while (true){
-        cout<<"===========================\n";
-        cout<<"|         MORSE CODE      |\n";
-        cout<<"===========================\n";
+        cout<<"==============================\n";
+        cout<<"|---------MORSE CODE---------|\n";
+        cout<<"==============================\n";
         cout<<"|\n";
-        cout<<"| Do you want to convert:\n";
+        cout<<"----- Do you want to convert: ------\n";
         cout<<"| [1] From morse code to text\n";
         cout<<"| [2] From text to morse code\n";
         cout<<"| [0] Back to main menu\n";
-        cout<<"| Enter your choice: ";cin>>ft;cout<<endl;
-        cin.ignore(1000, '\n');
+        cout<<"| Enter your choice: ";
+        if (!rd(ft)){
+            cout<<"\n| Invalid input!\n";
+            continue;
+        }
             if (ft==0)
                 break;
             if (ft<1 || ft>2) {
-                cout << "Invalid option!\n";
+                cout << "\n| Invalid option!\n";
                 continue;
                     }
             if (ft==1)
-            {cout<<"| Enter the morse code (spaces between letters, / between words): ";
+            {cout<<"===== MORSE TO TEXT =====\n";
+                cout<<"| Enter the morse code (spaces between letters, / between words): ";
                 getline(cin, inp);
                 cout<<"| In text: "<<morseToText(inp)<<endl;
             }
             else if (ft==2)
-            {cout<<"Enter the text: ";
+            {cout<<"===== TEXT TO MORSE =====\n";
+                cout<<"| Enter the text: ";
                 getline (cin, inp);
                 cout<<"| In morse code: "<<textToMorse(inp)<<endl;
             }
@@ -263,22 +277,25 @@ int main (){
     }
     else if (choice==2){
         while (true){
-        cout<<"===========================\n";
-        cout<<"|      NUMBER SYSTEMS     |"<<endl;
-        cout<<"===========================\n";
+        cout<<"============================\n";
+        cout<<"|------NUMBER SYSTEMS------|\n";
+        cout<<"============================\n";
         cout<<"|\n";
-        cout<<"| Do you want to convert:\n";
+        cout<<"----- Do you want to convert: -----\n";
         cout<<"| [1] From decimal to hexadecimal\n";
         cout<<"| [2] From hexadecimal to decimal\n";
         cout<<"| [3] From decimal to binary\n";
         cout<<"| [4] From binary to decimal\n";
         cout<<"| [0] Back to main menu\n";
-        cout<<"| Enter your choice: ";cin>>ft;cout<<endl;
-        cin.ignore(1000, '\n');
+        cout<<"| Enter your choice: ";
+        if (!rd(ft)){
+            cout<<"\n| Invalid input!\n";
+            continue;
+        }
         if (ft==0)
             break;
         if (ft<1 || ft>4) {
-            cout << "Invalid option!\n";
+            cout << "\n| Invalid option!\n";
             continue;
                 }
         if (ft==1){
@@ -361,11 +378,11 @@ int main (){
         }
         else if (choice==3){
             while (true){
-            cout<<"==========================="<<endl;
-            cout<<"|     CLASSICAL CIPHERS   |"<<endl;
-            cout<<"==========================="<<endl;
+            cout<<"============================="<<endl;
+            cout<<"|-----CLASSICAL CIPHERS-----|"<<endl;
+            cout<<"============================="<<endl;
             cout<<"|\n";
-            cout<<"| Choose an option:\n";
+            cout<<"----- Choose an option: -----\n";
             cout<<"| [1] Caesar Cipher decode\n";
             cout<<"| [2] Caesar Cipher encode\n";
             cout<<"| [3] Atbash Cipher\n";
@@ -373,7 +390,11 @@ int main (){
             cout<<"| [5] Vigenere Cipher decode\n";
             cout<<"| [6] Instructions/What are Classical Ciphers?\n";
             cout<<"| [0] Back to main menu\n";
-            cout<<"| Enter your choice: ";cin>>ft;cout<<endl;
+            cout<<"| Enter your choice: ";
+            if (!rd(ft)){
+                cout<<"\n| Invalid input!\n";
+                continue;
+            }
             if (ft==0)
             break;
             if (ft<1 || ft>6) {
@@ -455,22 +476,26 @@ int main (){
         else if(choice==4){
             while (true){
             cout<<"=========================\n";
-            cout<<"|        ASCII          |\n";
+            cout<<"|---------ASCII---------|\n";
             cout<<"=========================\n";
             cout<<"|\n";
-            cout<<"| Choose an option: \n";
+            cout<<"----- Choose an option: -----\n";
             cout<<"| [1] Text to ASCII\n";
             cout<<"| [2] ASCII to text\n";
             cout<<"| [0] Back to main menu\n";
-            cout<<"| Enter your choice: ";cin>>ft;cout<<endl;
-            cin.ignore(numeric_limits<streamsize>::max(),'\n');
+            cout<<"| Enter your choice: ";
+            if(!rd(ft)){
+                cout<<"\n| Invalid input!\n";
+                continue;
+            }
             if (ft==0)
             break;
             if (ft<0 || ft>2){
-                cout<<"Invalid option!\n";
+                cout<<"| Invalid option!\n";
                 continue;
                 }
             if (ft==1){
+                cout<<"===== TEXT TO ASCII =====\n";
                 cout<<"| Enter your message: ";
                 getline(cin, inp);cout<<endl;
                 cout<<"| Encoded message: "<<txtToAscii(inp)<<endl;
@@ -478,6 +503,7 @@ int main (){
                     cin.get();
             }
             else if (ft==2){
+                cout<<"===== ASCII TO TEXT =====\n";
                 cout<<"| Enter the ASCII numbers: ";
                 getline(cin, inp);cout<<endl;
                 cout<<" Decoded message: "<<asciiToTxt(inp)<<endl;
@@ -488,35 +514,40 @@ int main (){
     }
     else if (choice==5){
         while (true){
-        cout<<"=============================\n";
-        cout<<"|  A1Z26(NUMBER TO LETTER)  |\n";
-        cout<<"=============================\n";
+        cout<<"===============================\n";
+        cout<<"|---A1Z26(NUMBER TO LETTER)---|\n";
+        cout<<"===============================\n";
         cout<<"|\n";
-        cout<<"| Choose an option:\n";
+        cout<<"----- Choose an option: -----\n";
         cout<<"| [1] Letter to number\n";
         cout<<"| [2] Number to letter\n";
         cout<<"| [3] Manual\n";
         cout<<"| [0] Back to main menu\n";
-        cout<<"| Enter your choice: ";cin>>ft;cout<<endl;
-        cin.ignore(numeric_limits<streamsize>::max(),'\n');
+        cout<<"| Enter your choice: ";
+        if (!rd(ft)){
+            cout<<"\n| Invalid input!\n";
+            continue;
+        }
         if (ft==0)
         break;
         if (ft<1 || ft>3) {
-            cout << "Invalid option!\n";
+            cout << "| Invalid option!\n";
             continue;
             }
         if (ft==1){
+            cout<<"===== LETTER TO NUMBER =====\n";
             cout<<"| Enter text: ";
             getline(cin, inp);
             cout<<"| Encoded: "<<letterToNumber(inp)<<endl;
         }
         else if (ft==2){
+            cout<<"===== NUMBER TO LETTER =====\n";
             cout<<"| Enter the numbers: ";
             getline(cin, inp);
             cout<<"| Decoded: "<<numberToLetter(inp)<<endl;
         }
         else if (ft==3){
-            cout<<"=====MANUAL=====\n";
+            cout<<"===== MANUAL =====\n";
             cout<<"|A1Z26 replaces each letter with its position in the alphabet (A = 1, B = 2, ..., Z = 26).\n";
             cout<<"|Encode: Replace letters with numbers. CAT-3 1 20\n";
             cout<<"|Decode: Replace numbers with letters. 3 1 20-CAT\n| Use spaces between numbers and / between words.\n";
@@ -528,10 +559,10 @@ int main (){
     else if (choice==6){
         while (true){
         cout<<"========================\n";
-        cout<<"|         NATO\n       |";
+        cout<<"|---------NATO---------|\n";
         cout<<"========================\n";
         cout<<"|\n";
-        cout<<"| Choose an option:\n";
+        cout<<"----- Choose an option: -----\n";
         cout<<"| [1] Text to NATO\n";
         cout<<"| [2] NATO to text\n";
         cout<<"| [3] Manual\n";
@@ -551,11 +582,13 @@ int main (){
             continue;
             }
         if (ft==1){
+            cout<<"===== TEXT TO NATO =====\n";
             cout<<"| Enter text: ";
             getline(cin,txt);
             cout<<"| In NATO: "<<txtToNato(txt)<<endl;
         }
         else if (ft==2){
+            cout<<"===== NATO TO TEXT =====\n";
             cout<<"| Enter NATO (Use / between words): ";
             getline(cin, code);
             cout<<"| In text: "<<natoToTxt(code)<<endl;
