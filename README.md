@@ -6,6 +6,8 @@ SIGNAL is a C++ terminal-based encoding and decoding program inspired by vintage
 
 It brings together several encoding methods, classical ciphers, number systems, and a small decoding challenge in one place.
 
+<img width="751" height="477" alt="image" src="https://github.com/user-attachments/assets/23e19474-5544-4adb-a238-2600c1e209f4" />
+
 ---
 
 ## Features
@@ -20,6 +22,8 @@ It brings together several encoding methods, classical ciphers, number systems, 
 - **ASCII** – Convert text into ASCII values and back.
 - **A1Z26** – Replace letters with their positions in the alphabet and decode them.
 - **NATO Phonetic Alphabet** – Convert letters into NATO code words and back.
+
+  <img width="512" height="228" alt="Képernyőkép 2026-11-01 222009" src="https://github.com/user-attachments/assets/1bb659f2-f488-4ef2-9ff0-65a187b6a37a" />
 
 ### Additional Features
 - **Message History** – View previous conversions or clear the history.
@@ -59,6 +63,9 @@ Challenge Mode generates five messages using different encoding methods. The pla
 | 3–4/5 | AGENT |
 | 0–2/5 | TRAINEE |
 
+<img width="427" height="197" alt="image" src="https://github.com/user-attachments/assets/e7754df4-ae0b-4237-a2f3-45ef5b786aa8" />
+
+
 ---
 
 ## Technologies Used
@@ -87,6 +94,6 @@ Challenge Mode generates five messages using different encoding methods. The pla
 
 ## About
 
-SIGNAL is a beginner C++ project created for Terra (program by Hack Club) by SpagettiMaff.
+SIGNAL is a beginner C++ project created with love for Terra (program by Hack Club) by SpagettiMaff.
 
 **SIGNAL — Decoding the unknown since 1924.**
